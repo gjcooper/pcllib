@@ -40,3 +40,18 @@ sub
 begin
 	return "video("+v.filename()+")";
 end;
+
+sub
+	string join_str(array<string, 1>& parts, string join)
+begin
+	string result = parts[0];
+	loop
+		int i = 2
+	until
+		i > parts.count()
+	begin
+		result = result + join + parts[i];
+		i = i + 1;
+	end;
+	return result;
+end;
