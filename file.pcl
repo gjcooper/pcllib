@@ -1,0 +1,44 @@
+# FILE Subroutines
+#----------------------------------------------------
+
+# subroutine: csvread
+# inputs:
+#	dest: The 2D destination array (which will be overwritten)
+#	filepath: A string path to the file
+#	sep: A string represenation of the separator (If empty string defaults to ,)
+#	delim: A string representation of the line delimiter (If empty string use get_line() default)
+# outputs: A 2D array of strings [rows][columns]
+# errors: Throws an exit error if any element is missing from a row.
+sub
+	csvread(array<string,2>& csv, string filepath, string sep, int delim)
+begin
+	csv.resize(0);
+	input_file ifile = new input_file();
+	ifile.open(filepath, true);
+	if delim != 0 then
+		ifile.set_delimiter(delim);
+	end;
+	if sep == "" then
+		sep = ",";
+	end;
+	loop
+		int i = 1; int num_columns = -1;
+	until
+		false
+	begin
+		string line = ifile.get_line();
+		if ! ifile.last_succeeded() then
+			break;
+		end;
+		array<string> lineparts[0];
+		line.split(sep, lineparts);
+		if num_columns != -1 then
+			if lineparts.count() != num_columns then
+				exit("file.pcl::csvread found mismatched elements in row " + string(i));
+			end;
+		end;
+		num_columns = lineparts.count();
+		csv.add(lineparts);
+		i = i + 1;
+	end;
+end;
