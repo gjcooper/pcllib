@@ -123,7 +123,7 @@ end;
 #	search: The integer to search for
 # outputs: returns position (of first occurrence) of int if found otherwise 0
 sub
-	int position_of_int(array<string,1>& arr, string search)
+	int position_of_int(array<int,1>& arr, int search)
 begin
 	loop
 		int i = 1
@@ -149,3 +149,23 @@ begin
 	return bool(position_of_int(arr, search))
 end;
 
+# subroutine: position_of_str
+# inputs:
+#	arr: The array containing strings to search over
+#	search: The string to search for
+# outputs: returns position (of first occurrence) of str if found otherwise 0
+sub
+	int position_of_str(array<string,1>& arr, string search)
+begin
+	loop
+		int i = 1
+	until
+		i > arr.count()
+	begin
+		if arr[i] == search then
+			return i;
+		end;
+		i = i + 1;
+	end;
+	return 0;
+end;
