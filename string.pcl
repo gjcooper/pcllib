@@ -6,9 +6,9 @@
 #	vec: vector to display
 # outputs: a string representation of the vector
 sub
-	vector_tostring(vector vec)
+	string vector_tostring(vector vec)
 begin
-		return "vector(" + string(v_array[v].x) + ", " + string(v_array[v].y) + ", " + string(v_array[v].z) + ")";
+	return "vector(" + string(vec.x) + ", " + string(vec.y) + ", " + string(vec.z) + ")";
 end;
 
 sub
@@ -44,7 +44,7 @@ end;
 sub
 	string join_str(array<string, 1>& parts, string join)
 begin
-	string result = parts[0];
+	string result = parts[1];
 	loop
 		int i = 2
 	until
