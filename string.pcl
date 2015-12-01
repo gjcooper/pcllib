@@ -1,0 +1,42 @@
+#STRING Subroutines
+# -----------------------------------------------
+
+# subroutine: vector_tostring
+# inputs:
+#	vec: vector to display
+# outputs: a string representation of the vector
+sub
+	vector_tostring(vector vec)
+begin
+		return "vector(" + string(v_array[v].x) + ", " + string(v_array[v].y) + ", " + string(v_array[v].z) + ")";
+end;
+
+sub
+	string colour_tostring(rgb_color col)
+begin
+	return "rgb_color("+string(col.red_byte())+","+string(col.green_byte())+","+string(col.blue_byte())+","+string(col.alpha_byte())+")";
+end;
+
+sub
+	string image_tostring(bitmap b)
+begin
+	return "image("+b.filename()+")";
+end;
+
+sub
+	string mesh_tostring(mesh m)
+begin
+	return "mesh("+m.filename()+")";
+end;
+
+sub
+	string sound_tostring(wavefile w)
+begin
+	return "sound("+w.filename()+")";
+end;
+
+sub
+	string video_tostring(video v)
+begin
+	return "video("+v.filename()+")";
+end;

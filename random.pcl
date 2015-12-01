@@ -1,0 +1,19 @@
+# -----------------------------------------------
+# RANDOM subroutines (manipulations on random)
+# -----------------------------------------------
+
+# subroutine: randouble
+# inputs:
+#	lower: The lower bound (firm) of the random distribution
+#	upper: The upper bound (soft) of the random distribution
+# outputs: a random double between lower and upper
+sub double randouble(double lower, double upper)
+begin
+	#Get random between [0,1)
+	double r = random();
+	#Scale the random number
+	r = r * (upper - lower);
+	#Shift the random number
+	return (r + lower);
+end;
+

@@ -1,0 +1,121 @@
+#PARAMETER Subroutines
+# -----------------------------------------------
+include "string.pcl";
+
+# subroutine: parameter_type_repr
+# inputs:
+#	name: The name of the parameter to represent
+# outputs: A string representation of the parameter
+sub
+	string parameter_type_repr(string name) #Can only represent single values as string.
+begin
+	int typecode = parameter_manager.get_parameter_type(name);
+	int dimension = parameter_manager.get_parameter_dimension(name);
+	string type = "";
+	string arr = "";
+	string value = "";
+	if typecode == parameter_manager.BOOL then
+		type = "Boolean";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of bools]";
+		else
+			value = string(parameter_manager.get_bool(name));
+		end;
+	elseif typecode == parameter_manager.COLOR then
+		type = "Colour";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Colours]";
+		else
+			value = colour_tostring(parameter_manager.get_color(name));
+		end;
+	elseif typecode == parameter_manager.DOUBLE then
+		type = "Floating Point";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Doubles]";
+		else
+			value = string(parameter_manager.get_double(name));
+		end;
+	elseif typecode == parameter_manager.IMAGE then
+		type = "Image";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Images]";
+		else
+			value = image_tostring(parameter_manager.get_bitmap(name));
+		end;
+	elseif typecode == parameter_manager.INT then
+		type = "Integer";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Doubles]";
+		else
+			value = string(parameter_manager.get_int(name));
+		end;
+	elseif typecode == parameter_manager.MESH then
+		type = "Mesh";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Meshes]";
+		else
+			value = mesh_tostring(parameter_manager.get_mesh(name));
+		end;
+	elseif typecode == parameter_manager.NONE then
+		exit("Parameter not found by name");
+	elseif typecode == parameter_manager.SOUND then
+		type = "Sound";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Sounds]";
+		else
+			value = sound_tostring(parameter_manager.get_wavefile(name));
+		end;
+	elseif typecode == parameter_manager.STRING then
+		type = "String";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Strings]";
+		else
+			value = parameter_manager.get_string(name);
+		end;
+	elseif typecode == parameter_manager.VIDEO then
+		type = "Video";
+		if dimension > 0 then
+			arr = " Array";
+			value = "[Array of Videos]";
+		else
+			value = video_tostring(parameter_manager.get_video(name));
+		end;
+	else
+		exit("Unrecognised parameter type");
+	end;
+	return type + arr + "] Value: [" + value;
+end;
+	
+# subroutine: print_parameters
+# inputs:
+#	sink: The string to modify in-place with the parameter report
+# outputs: A report on all parameters (modify sink in place)
+sub
+	print_parameters(string& sink)
+begin
+	sink = sink + "_____Parameter Report_____\n";
+	sink = sink + "Parameter Set: " + parameter_manager.parameter_set_name() + "\n";
+	sink = sink + "Configuration: " + parameter_manager.configuration_name() + "\n";
+	array<string> parameters[0];
+	parameter_manager.get_parameter_names(parameters);
+	loop
+		int i = 1
+	until
+		i > parameters.count()
+	begin
+		sink = sink + "Parameter: [" + parameters[i];
+		int ptcode = parameter_manager.get_parameter_type(parameters[i]);
+		int ptdim = parameter_manager.get_parameter_type(parameters[i]);
+		string parm_repr = parameter_type_repr(parameters[i]);
+		sink = sink + "], Type: [" + parm_repr + "]\n";
+		i = i + 1;
+	end;
+end;

@@ -1,0 +1,20 @@
+#SUM Subroutines
+# -----------------------------------------------
+
+# subroutine: bounded_sum_int
+# inputs: 
+#	augend: first number to be added
+#	addend: second number to be added
+#	lower_bound: The minimum number to be returned
+#	upper_bound: The maximum number to be returned
+sub
+	int bounded_sum(int augend, int addend, int lower_bound, int upper_bound)
+begin
+	int sum = augend + addend;
+	if sum < lower_bound then
+		return lower_bound
+	elseif sum > upper_bound then
+		return upper_bound
+	end;
+	return sum;
+end;

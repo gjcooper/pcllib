@@ -1,0 +1,151 @@
+# -----------------------------------------------
+# Array subroutines
+# -----------------------------------------------
+
+# subroutine: partial_sum_int
+# inputs:
+#	arr: the array containing the integers to sum over
+#	s: the index of the first value to sum from
+#	e: the index of the last value to sum
+# output: the sum of all ints between s and e
+sub
+	int partial_sum_int(array<int,1>& arr, int s, int e)
+begin
+	int sum = 0;
+	loop
+		int i = s;
+	until
+		i > e
+	begin
+		sum = sum + arr[i];
+		i = i + 1;
+	end;
+	return sum;
+end;
+
+# subroutine: full_sum_int
+# inputs:
+#	arr: the array containing the integers to sum over
+# output: the sum of all integers in the array (Calls partial sum over whole array)
+sub
+	int full_sum_int(array<int,1>& arr)
+begin
+	return partial_sum_int(arr, 1, arr.count());
+end;
+
+# subroutine: fill_temp_int
+# inputs:
+#	temp: the array to be filled
+#	numbers: The array containing numbers of each value to use
+#	source: The values to use to fill in temp
+#	s: The starting point to fill from in source/numbers etc
+#	e: The ending point to fill from in source/numbers etc
+#	shuffle: Whether or not to shuffle the result
+# outputs: No explicit return value, operates on temp in place
+sub
+	fill_temp_int(array<int, 1>& temp, array<int, 1>& numbers, array<int, 1>& source, int s, int e, bool shuffle)
+	#Resize and fill the temporary array with correct numbers of each stimulus type, apply shuffle
+begin
+	temp.resize(partial_sum(numbers, s, e));
+	loop
+		int i = s; int cntr = 1;
+	until
+		i > e
+	begin
+		temp.fill(cntr, cntr + numbers[i] - 1, source[i], 0);
+		cntr = cntr + numbers[i];
+		i = i + 1;
+	end;
+	if shuffle then
+		temp.shuffle();
+	end;
+end;
+
+
+# subroutine: array_pop_int
+# inputs:
+#	temp: The temporary array to pop from
+# outputs: return the last value in temp and remove it from the array
+sub
+	int array_pop_int(array<int, 1>& temp)
+begin
+	int val = temp[temp.count()];
+	temp.resize(temp.count() - 1);
+	return val;
+end;
+
+# subroutine: str_count
+# inputs:
+#	arr: the array containing strings to search through
+#	search_str: the string that has the search term
+#	partial: if true then count incremented if search_str found within str_array element
+# output: A count of the number of occurences of search within array
+sub
+	int str_count(array<string,1>& arr, string search_str, bool partial)
+begin
+	int count = 0;
+	loop
+		int i = 1
+	until
+		i > arr.count()
+	begin
+		if arr[i] == search_str then
+			count = count + 1;
+		else if( partial && (arr[i].find(search_str) > 0)) then
+			count = count + 1;
+		end;
+		i = i + 1;
+	end;
+	return count;
+end;
+
+# subroutine: get_max_int
+# inputs:
+#	arr: The array containing integers to search over
+# outputs: The larget value
+sub 
+	int get_maximum_int(array<int,1>& arr)
+begin
+	int maximum = -2147483648; #The smallest 32-bit signed int
+	loop int counter = 1 until counter > arr.count()
+	begin
+		if thearray[counter] > maximum then
+			maximum = thearray[counter];
+		end;
+		counter = counter + 1;	
+	end;
+	return maximum
+end;
+
+# subroutine: position_of_int
+# inputs:
+#	arr: The array containing integers to search over
+#	search: The integer to search for
+# outputs: returns position (of first occurrence) of int if found otherwise 0
+sub
+	int position_of_int(array<string,1>& arr, string search)
+begin
+	loop
+		int i = 1
+	until
+		i > arr.count()
+	begin
+		if arr[i] == search then
+			return i;
+		end;
+		i = i + 1;
+	end;
+	return 0;
+end;
+
+# subroutine: int_in
+# inputs:
+#	arr: The array containing integers to search over
+#	search: The integer to search for
+# outputs: returns true if int found otherwise false (Uses position_of_int)
+sub
+	bool int_in(array<int,1>& arr, int search)
+begin
+	return bool(position_of_int(arr, search))
+end;
+
