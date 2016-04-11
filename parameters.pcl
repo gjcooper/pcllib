@@ -119,3 +119,18 @@ begin
 		i = i + 1;
 	end;
 end;
+
+# subroutine: output_parameters
+# inputs:
+#	filename: The string to send to the output_file.open command
+# outputs: none, a saved file gets created.
+sub
+	output_parameters(string filename)
+begin
+	output_file ofile = new output_file();
+	ofile.open(filename);
+	string tosave = "";
+	print_parameters(tosave);
+	ofile.print(tosave);
+	ofile.close();
+end;
