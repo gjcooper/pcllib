@@ -13,5 +13,7 @@ if __name__=='__main__':
     source = sys.argv[1]
     dest = sys.argv[2]
     utilsets = sys.argv[3:]
+    if 'parameters' in utilsets and 'string' not in utilsets:
+        utilsets.append('string')
     for lib in utilsets:
         copy(libfile(source, lib), dest)
