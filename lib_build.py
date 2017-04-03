@@ -46,6 +46,8 @@ def augment_libraries(src_dir, libs_selected):
             final_libs.add(libfile(src_dir, new))
     return final_libs
 
+def opener(path, flags):
+    return os.open(path, flags & os.O_APPEND)
 
 def deploy():
     parser = argparse.ArgumentParser(description='{} - deploy {} - Deploy pcl files to a project directory'.format(__package__, __version__))
@@ -78,9 +80,19 @@ def deploy():
     # Send the needed libraries to the destination directory
     for lib in final_libs:
         name = os.path.basename(lib)
-        with open(os.path.join(args.destination, name), 'x') as destfile:
-            with open(lib, 'r') as srcfile:
-                destfile.write(deploy_hdr + srcfile.read())
+        try:
+            with open(os.path.join(args.destination, name), 'x') as destfile:
+                with open(lib, 'r') as srcfile:
+                    destfile.write(deploy_hdr + srcfile.read())
+        except FileExistsError:
+            print('{} already found in destination directory, ignoring...'.format(name))
+    gitignore = os.path.join(args.destination, '.gitignore')
+    try:
+        with open(gitignore, 'a', opener=opener) as ignore_file:
+            ignore_file.write('\n'.join(['/' + os.path.basename(f) for f in final_libs]))
+    except IOError:
+        print('WARNING: .gitignore file not found')
+        pass
 
 
 def libfile(sourcedir, libname):
