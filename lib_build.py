@@ -91,7 +91,7 @@ def deploy():
     gitignore = os.path.join(args.destination, '.gitignore')
     try:
         with open(gitignore, 'a+', opener=append_if_exists) as ignore_file:
-            ignore_file.write('\n'.join(['/' + os.path.basename(f) for f in final_libs]))
+            ignore_file.write('\n# Added auomatically by lib_build.py' + '\n'.join(['/' + os.path.basename(f) for f in final_libs]))
     except IOError as e:
         print(e)
         print('WARNING: .gitignore file not found: {}'.format(os.path.join(args.destination, '.gitignore')))
