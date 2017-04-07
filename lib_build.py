@@ -48,7 +48,7 @@ def augment_libraries(src_dir, libs_selected):
 
 
 def append_if_exists(path, flags):
-    return os.open(path, flags & os.O_APPEND)
+    return os.open(path, os.O_APPEND | os.O_WRONLY)
 
 
 def deploy():
@@ -90,10 +90,11 @@ def deploy():
             print('{} already found in destination directory, ignoring...'.format(name))
     gitignore = os.path.join(args.destination, '.gitignore')
     try:
-        with open(gitignore, 'a', opener=append_if_exists) as ignore_file:
+        with open(gitignore, 'a+', opener=append_if_exists) as ignore_file:
             ignore_file.write('\n'.join(['/' + os.path.basename(f) for f in final_libs]))
-    except IOError:
-        print('WARNING: .gitignore file not found')
+    except IOError as e:
+        print(e)
+        print('WARNING: .gitignore file not found: {}'.format(os.path.join(args.destination, '.gitignore')))
         pass
 
 
